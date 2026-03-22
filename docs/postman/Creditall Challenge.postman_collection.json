@@ -1,0 +1,96 @@
+{
+  "info": {
+    "name": "Creditall Challenge",
+    "_postman_id": "c2a322ab-6f7a-4ccf-a985-6e584501d1ce",
+    "description": "Collection for the Creditall Laravel API challenge.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8000"
+    }
+  ],
+  "item": [
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "List Products",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/products"
+          }
+        },
+        {
+          "name": "Create Product",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "name", "value": "Mechanical Keyboard", "type": "text" },
+                { "key": "description", "value": "Hot-swappable 75% keyboard.", "type": "text" },
+                { "key": "price", "value": "499.90", "type": "text" }
+              ]
+            },
+            "url": "{{baseUrl}}/api/v1/products"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Customers",
+      "item": [
+        {
+          "name": "List Customers",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/customers"
+          }
+        },
+        {
+          "name": "Create Customer",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Ana Martins\",\n  \"email\": \"ana.martins@example.com\",\n  \"cpf\": \"52998224725\"\n}"
+            },
+            "url": "{{baseUrl}}/api/v1/customers"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sales",
+      "item": [
+        {
+          "name": "List Sales",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/sales"
+          }
+        },
+        {
+          "name": "Create Sale",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"product_id\": 1,\n  \"customer_id\": 1,\n  \"sold_at\": \"2026-03-20 10:30:00\",\n  \"quantity\": 2,\n  \"discount\": \"5.00\",\n  \"status\": \"pending\"\n}"
+            },
+            "url": "{{baseUrl}}/api/v1/sales"
+          }
+        }
+      ]
+    }
+  ]
+}

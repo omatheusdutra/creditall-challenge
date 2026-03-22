@@ -1,0 +1,488 @@
+openapi: 3.1.0
+info:
+  title: Creditall Sales API
+  version: 1.0.0
+  description: >
+    REST API for managing products, customers and sales with Laravel 11,
+    MySQL 8 and Docker Compose.
+servers:
+  - url: http://localhost:8000
+    description: Local Docker environment
+tags:
+  - name: Products
+  - name: Customers
+  - name: Sales
+paths:
+  /api/v1/products:
+    get:
+      tags: [Products]
+      summary: List products
+      parameters:
+        - $ref: '#/components/parameters/Search'
+        - name: min_price
+          in: query
+          schema: { type: number, format: decimal }
+        - name: max_price
+          in: query
+          schema: { type: number, format: decimal }
+        - $ref: '#/components/parameters/Direction'
+        - name: sort
+          in: query
+          schema:
+            type: string
+            enum: [name, price, created_at]
+        - $ref: '#/components/parameters/PerPage'
+      responses:
+        '200':
+          description: Paginated product list
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PaginatedResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Product'
+    post:
+      tags: [Products]
+      summary: Create product
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProductUpsertRequest'
+      responses:
+        '201':
+          description: Product created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductResponse'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /api/v1/products/{product}:
+    get:
+      tags: [Products]
+      summary: Show product
+      parameters:
+        - $ref: '#/components/parameters/ProductId'
+      responses:
+        '200':
+          description: Product payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+    put:
+      tags: [Products]
+      summary: Update product
+      parameters:
+        - $ref: '#/components/parameters/ProductId'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/ProductUpsertRequest'
+                - type: object
+                  properties:
+                    remove_image:
+                      type: boolean
+      responses:
+        '200':
+          description: Product updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductResponse'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+    delete:
+      tags: [Products]
+      summary: Delete product
+      parameters:
+        - $ref: '#/components/parameters/ProductId'
+      responses:
+        '204':
+          description: Product deleted
+        '409':
+          $ref: '#/components/responses/ConflictError'
+  /api/v1/customers:
+    get:
+      tags: [Customers]
+      summary: List customers
+      parameters:
+        - $ref: '#/components/parameters/Search'
+        - $ref: '#/components/parameters/Direction'
+        - name: sort
+          in: query
+          schema:
+            type: string
+            enum: [name, email, created_at]
+        - $ref: '#/components/parameters/PerPage'
+      responses:
+        '200':
+          description: Paginated customer list
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PaginatedResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Customer'
+    post:
+      tags: [Customers]
+      summary: Create customer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerUpsertRequest'
+      responses:
+        '201':
+          description: Customer created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerResponse'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /api/v1/customers/{customer}:
+    get:
+      tags: [Customers]
+      summary: Show customer
+      parameters:
+        - $ref: '#/components/parameters/CustomerId'
+      responses:
+        '200':
+          description: Customer payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+    put:
+      tags: [Customers]
+      summary: Update customer
+      parameters:
+        - $ref: '#/components/parameters/CustomerId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerUpsertRequest'
+      responses:
+        '200':
+          description: Customer updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerResponse'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+    delete:
+      tags: [Customers]
+      summary: Delete customer
+      parameters:
+        - $ref: '#/components/parameters/CustomerId'
+      responses:
+        '204':
+          description: Customer deleted
+        '409':
+          $ref: '#/components/responses/ConflictError'
+  /api/v1/sales:
+    get:
+      tags: [Sales]
+      summary: List sales
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [pending, completed, cancelled]
+        - name: product_id
+          in: query
+          schema: { type: integer }
+        - name: customer_id
+          in: query
+          schema: { type: integer }
+        - name: sold_from
+          in: query
+          description: Inclusive start date in Y-m-d format.
+          schema: { type: string, format: date }
+        - name: sold_to
+          in: query
+          description: Inclusive end date in Y-m-d format.
+          schema: { type: string, format: date }
+        - $ref: '#/components/parameters/Direction'
+        - name: sort
+          in: query
+          schema:
+            type: string
+            enum: [sold_at, created_at, final_amount, status]
+        - $ref: '#/components/parameters/PerPage'
+      responses:
+        '200':
+          description: Paginated sale list
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PaginatedResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Sale'
+    post:
+      tags: [Sales]
+      summary: Create sale
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaleUpsertRequest'
+      responses:
+        '201':
+          description: Sale created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SaleResponse'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /api/v1/sales/{sale}:
+    get:
+      tags: [Sales]
+      summary: Show sale
+      parameters:
+        - $ref: '#/components/parameters/SaleId'
+      responses:
+        '200':
+          description: Sale payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SaleResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+    put:
+      tags: [Sales]
+      summary: Update sale
+      parameters:
+        - $ref: '#/components/parameters/SaleId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaleUpsertRequest'
+      responses:
+        '200':
+          description: Sale updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SaleResponse'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+    delete:
+      tags: [Sales]
+      summary: Delete sale
+      parameters:
+        - $ref: '#/components/parameters/SaleId'
+      responses:
+        '204':
+          description: Sale deleted
+components:
+  parameters:
+    Search:
+      name: search
+      in: query
+      schema:
+        type: string
+    Direction:
+      name: direction
+      in: query
+      schema:
+        type: string
+        enum: [asc, desc]
+    PerPage:
+      name: per_page
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+    ProductId:
+      name: product
+      in: path
+      required: true
+      schema:
+        type: integer
+    CustomerId:
+      name: customer
+      in: path
+      required: true
+      schema:
+        type: integer
+    SaleId:
+      name: sale
+      in: path
+      required: true
+      schema:
+        type: integer
+  responses:
+    ValidationError:
+      description: Validation error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFoundError:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    ConflictError:
+      description: Integrity or business conflict
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    Product:
+      type: object
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        description: { type: string }
+        price: { type: string, example: '499.90' }
+        image:
+          type: [object, 'null']
+          properties:
+            path: { type: string }
+            url: { type: string, format: uri }
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
+    Customer:
+      type: object
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        email: { type: string, format: email }
+        cpf: { type: string, example: '***.***.***-25' }
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
+    Sale:
+      type: object
+      properties:
+        id: { type: integer }
+        product_id: { type: integer }
+        customer_id: { type: integer }
+        sold_at: { type: string, format: date-time }
+        quantity: { type: integer }
+        discount: { type: string, example: '5.00' }
+        status:
+          type: string
+          enum: [pending, completed, cancelled]
+        unit_price: { type: string, example: '50.00' }
+        gross_amount: { type: string, example: '100.00' }
+        final_amount: { type: string, example: '95.00' }
+        product:
+          type: object
+          properties:
+            id: { type: integer }
+            name: { type: string }
+        customer:
+          type: object
+          properties:
+            id: { type: integer }
+            name: { type: string }
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
+    ProductUpsertRequest:
+      type: object
+      required: [name, description, price]
+      properties:
+        name: { type: string }
+        description: { type: string }
+        price: { type: number, format: decimal, minimum: 0.01 }
+        image:
+          type: string
+          format: binary
+    CustomerUpsertRequest:
+      type: object
+      required: [name, email, cpf]
+      properties:
+        name: { type: string }
+        email: { type: string, format: email }
+        cpf: { type: string, example: '52998224725' }
+    SaleUpsertRequest:
+      type: object
+      required: [product_id, customer_id, sold_at, quantity, discount, status]
+      properties:
+        product_id: { type: integer }
+        customer_id: { type: integer }
+        sold_at: { type: string, format: date-time }
+        quantity: { type: integer, minimum: 1 }
+        discount: { type: number, format: decimal, minimum: 0 }
+        status:
+          type: string
+          enum: [pending, completed, cancelled]
+    ProductResponse:
+      type: object
+      properties:
+        message: { type: string }
+        data:
+          $ref: '#/components/schemas/Product'
+    CustomerResponse:
+      type: object
+      properties:
+        message: { type: string }
+        data:
+          $ref: '#/components/schemas/Customer'
+    SaleResponse:
+      type: object
+      properties:
+        message: { type: string }
+        data:
+          $ref: '#/components/schemas/Sale'
+    PaginatedResponse:
+      type: object
+      properties:
+        message: { type: string }
+        data:
+          type: array
+          items: {}
+        links:
+          type: object
+        meta:
+          type: object
+    ErrorResponse:
+      type: object
+      properties:
+        message: { type: string }
+        errors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title>Creditall Control Center</title>
+  <defs>
+    <linearGradient id="bg" x1="0%" x2="100%" y1="0%" y2="100%">
+      <stop offset="0%" stop-color="#f8f1e3" />
+      <stop offset="100%" stop-color="#e6d3b7" />
+    </linearGradient>
+    <linearGradient id="spark" x1="0%" x2="100%" y1="0%" y2="100%">
+      <stop offset="0%" stop-color="#d46a36" />
+      <stop offset="100%" stop-color="#8d3214" />
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#bg)" />
+  <path d="M18 31c0-9.389 7.611-17 17-17 5.842 0 10.996 2.946 14.054 7.434l-6.361 4.191C40.853 22.83 38.126 21 35 21c-5.523 0-10 4.477-10 10s4.477 10 10 10c3.143 0 5.885-1.848 7.721-4.669l6.274 4.319C45.892 45.107 40.787 48 35 48c-9.389 0-17-7.611-17-17Z" fill="#11203b"/>
+  <path d="m34.5 30.8 5.3-5.3 4.4 4.4-5.3 5.3H50v6.3H34.5z" fill="url(#spark)"/>
+</svg>
