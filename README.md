@@ -329,31 +329,6 @@ docker compose run --rm app php artisan migrate:fresh --seed --force
 - API base: `http://localhost:8000/api/v1`
 - MySQL: `localhost:33060`
 
-## 💻 Como rodar sem Docker
-
-> Fluxo opcional. O caminho recomendado para avaliação continua sendo Docker Compose.
-
-Pré-requisitos:
-
-- PHP 8.3+
-- Composer 2+
-- MySQL 8+
-
-```bash
-cp .env.local.example .env
-cp .env.testing.example .env.testing
-composer install
-php artisan key:generate
-php artisan migrate:fresh --seed
-php artisan storage:link
-php artisan serve
-```
-
-Bancos esperados no MySQL local:
-
-- `creditall`
-- `creditall_testing`
-
 ## 🧪 Testes
 
 ### PHPUnit
