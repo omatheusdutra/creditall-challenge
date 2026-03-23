@@ -555,10 +555,7 @@ select {
 }
 
 .summary-heading {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(260px, 360px);
-    gap: 18px;
-    align-items: start;
+    display: block;
     margin-bottom: 18px;
 }
 
@@ -567,12 +564,6 @@ select {
     font-family: var(--font-display);
     font-size: clamp(1.6rem, 3vw, 2.5rem);
     letter-spacing: -0.04em;
-}
-
-.summary-caption {
-    max-width: 36ch;
-    margin: 0;
-    justify-self: end;
 }
 
 .summary-grid {

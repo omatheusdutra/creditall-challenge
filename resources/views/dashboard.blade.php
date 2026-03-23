@@ -100,10 +100,6 @@
                         <p class="eyebrow">Sales intelligence</p>
                         <h2>Performance financeira da opera&ccedil;&atilde;o comercial.</h2>
                     </div>
-                    <p class="summary-caption" id="sales-summary-range">
-                        Escopo ativo | Todos os status | Janela completa | View 1/1 | Indicadores derivados do
-                        dataset vis&iacute;vel.
-                    </p>
                 </div>
 
                 <div class="summary-grid">

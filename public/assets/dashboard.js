@@ -24,7 +24,6 @@
         discount: document.querySelector('[data-summary="discount"]'),
         net: document.querySelector('[data-summary="net"]'),
         completed: document.querySelector('[data-summary="completed"]'),
-        range: document.getElementById('sales-summary-range'),
     };
     const panelSummaries = {
         products: {
@@ -1341,25 +1340,6 @@
         summaries.discount.textContent = currency(discount);
         summaries.net.textContent = currency(net);
         summaries.completed.textContent = String(completed);
-        summaries.range.textContent = buildSalesSummaryCaption(meta);
-    }
-
-    function buildSalesSummaryCaption(meta) {
-        const fragments = [];
-
-        fragments.push('Escopo ativo');
-        fragments.push(state.sales.status ? `Status: ${labelForSaleStatus(state.sales.status)}` : 'Todos os status');
-        fragments.push(state.sales.sold_from || state.sales.sold_to
-            ? `Janela: ${state.sales.sold_from || 'início'} até ${state.sales.sold_to || 'hoje'}`
-            : 'Janela completa');
-
-        if (meta.current_page && meta.last_page) {
-            fragments.push(`View ${meta.current_page}/${meta.last_page}`);
-        }
-
-        fragments.push('Indicadores derivados do dataset visível.');
-
-        return fragments.join(' | ');
     }
 
     function buildSalesPeriodLabel() {
