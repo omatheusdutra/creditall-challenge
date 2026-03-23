@@ -726,8 +726,11 @@
         setPanelSummaryStat(
             'products',
             'secondary',
-            prices.length > 0 ? `${currency(Math.min(...prices))} ate ${currency(Math.max(...prices))}` : 'Sem faixa visivel',
+            prices.length > 0
+                ? buildPriceRangeMarkup(currency(Math.min(...prices)), currency(Math.max(...prices)))
+                : 'Sem faixa visivel',
             prices.length > 0 ? 'Baseado nos itens da tela' : 'Aguardando catalogo',
+            { html: prices.length > 0 },
         );
         setPanelSummaryStat(
             'products',
@@ -764,15 +767,32 @@
         setPanelSummaryStat('sales', 'tertiary', currency(net), `${completed} concluidas visiveis`);
     }
 
-    function setPanelSummaryStat(entity, key, value, note) {
+    function setPanelSummaryStat(entity, key, value, note, options = {}) {
         const summary = panelSummaries[entity];
 
         if (!summary) {
             return;
         }
 
-        summary[key].textContent = value;
+        summary[key].classList.toggle('panel-mini-value-rich', Boolean(options.html));
+
+        if (options.html) {
+            summary[key].innerHTML = value;
+        } else {
+            summary[key].textContent = value;
+        }
+
         summary[`${key}Note`].textContent = note;
+    }
+
+    function buildPriceRangeMarkup(minValue, maxValue) {
+        return `
+            <span class="panel-mini-range">
+                <span class="panel-mini-range-amount">${escapeHtml(minValue)}</span>
+                <span class="panel-mini-range-separator">até</span>
+                <span class="panel-mini-range-amount">${escapeHtml(maxValue)}</span>
+            </span>
+        `;
     }
 
     function patchVisibleSalesFromReference(type, item) {
@@ -1327,16 +1347,17 @@
     function buildSalesSummaryCaption(meta) {
         const fragments = [];
 
+        fragments.push('Escopo ativo');
         fragments.push(state.sales.status ? `Status: ${labelForSaleStatus(state.sales.status)}` : 'Todos os status');
         fragments.push(state.sales.sold_from || state.sales.sold_to
-            ? `Periodo: ${state.sales.sold_from || 'inicio'} ate ${state.sales.sold_to || 'hoje'}`
-            : 'Todas as datas');
+            ? `Janela: ${state.sales.sold_from || 'início'} até ${state.sales.sold_to || 'hoje'}`
+            : 'Janela completa');
 
         if (meta.current_page && meta.last_page) {
-            fragments.push(`Pagina visivel: ${meta.current_page}/${meta.last_page}`);
+            fragments.push(`View ${meta.current_page}/${meta.last_page}`);
         }
 
-        fragments.push('Os valores sao agregados a partir dos resultados visiveis na tela.');
+        fragments.push('Indicadores derivados do dataset visível.');
 
         return fragments.join(' | ');
     }

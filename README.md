@@ -309,8 +309,17 @@ docker compose build app
 docker compose up -d mysql
 docker compose run --rm app composer install --no-interaction --prefer-dist
 docker compose run --rm app php artisan key:generate
-docker compose run --rm app php artisan migrate:fresh --seed --force
 docker compose up -d app
+```
+
+Observação:
+
+- o serviço `app` executa `php artisan migrate --seed --force` no bootstrap
+- em volume novo, o banco sobe já populado com a massa inicial
+- para resetar manualmente o estado do banco, use:
+
+```bash
+docker compose run --rm app php artisan migrate:fresh --seed --force
 ```
 
 ### 2. URLs úteis

@@ -12,6 +12,6 @@ class DashboardPageTest extends TestCase
     {
         $this->get('/')
             ->assertOk()
-            ->assertSee('Painel de controle para cat&aacute;logo, clientes e vendas.', false);
+            ->assertSee('Central de opera&ccedil;&otilde;es comerciais.', false);
     }
 }

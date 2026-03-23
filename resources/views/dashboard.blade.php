@@ -18,32 +18,11 @@
             <section class="hero-card">
                 <div class="hero-copy">
                     <p class="eyebrow">Creditall Sales API</p>
-                    <h1>Painel de controle para cat&aacute;logo, clientes e vendas.</h1>
+                    <h1>Central de opera&ccedil;&otilde;es comerciais.</h1>
                     <p class="hero-text">
                         Uma superf&iacute;cie administrativa leve sobre a API Laravel. Gerencie o ciclo completo sem
                         sair do navegador.
                     </p>
-
-                    <div class="hero-actions">
-                        <a class="button button-primary" href="/docs">Abrir documenta&ccedil;&atilde;o</a>
-                        <a class="button button-secondary" href="/api/v1/products" target="_blank" rel="noreferrer">
-                            Ver JSON da API
-                        </a>
-                    </div>
-
-                    <div class="hero-pill-row" aria-label="Highlights do painel">
-                        <span class="hero-pill">CRUD completo</span>
-                        <span class="hero-pill">Upload de imagem</span>
-                        <span class="hero-pill">API versionada</span>
-                    </div>
-                </div>
-
-                <div class="hero-status">
-                    <div class="hero-status-grid">
-                        <div class="status-card"><span>Vers&atilde;o da API</span><strong>v1</strong></div>
-                        <div class="status-card"><span>Storage</span><strong>Disco p&uacute;blico local</strong></div>
-                        <div class="status-card"><span>Modelo de dom&iacute;nio</span><strong>Produtos, Clientes, Vendas</strong></div>
-                    </div>
 
                     <article class="hero-highlight">
                         <p class="eyebrow">Fluxo recomendado</p>
@@ -59,6 +38,41 @@
                             <button class="button button-ghost hero-jump" type="button" data-panel-jump="sales">Abrir vendas</button>
                         </div>
                     </article>
+                </div>
+
+                <div class="hero-status">
+                    <div class="hero-status-grid">
+                        <div class="status-card status-card-api">
+                            <span>Vers&atilde;o da API</span>
+                            <strong>v1</strong>
+                            <small>Contrato est&aacute;vel para integra&ccedil;&otilde;es e evolu&ccedil;&atilde;o incremental.</small>
+                        </div>
+                        <div class="status-card status-card-storage">
+                            <span>Storage</span>
+                            <strong>Disco p&uacute;blico local</strong>
+                            <small>Estrutura organizada para m&iacute;dia local, com caminho claro para S3.</small>
+                        </div>
+                        <div class="status-card status-card-domain">
+                            <span>Modelo de dom&iacute;nio</span>
+                            <strong>Produtos, Clientes, Vendas</strong>
+                            <small>N&uacute;cleo comercial enxuto, transacional e pronto para extens&otilde;es futuras.</small>
+                        </div>
+                    </div>
+
+                    <div class="hero-command-deck">
+                        <div class="hero-actions">
+                            <a class="button button-primary" href="/docs">Abrir documenta&ccedil;&atilde;o</a>
+                            <a class="button button-secondary" href="/api/v1/products" target="_blank" rel="noreferrer">
+                                Ver JSON da API
+                            </a>
+                        </div>
+
+                        <div class="hero-pill-row" aria-label="Highlights do painel">
+                            <span class="hero-pill">CRUD completo</span>
+                            <span class="hero-pill">Upload de imagem</span>
+                            <span class="hero-pill">API versionada</span>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -83,11 +97,12 @@
             <section class="summary-band" aria-label="Current sales summary">
                 <div class="summary-heading">
                     <div>
-                        <p class="eyebrow">Resumo de vendas</p>
-                        <h2>Pulso financeiro da vis&atilde;o atual de vendas.</h2>
+                        <p class="eyebrow">Sales intelligence</p>
+                        <h2>Performance financeira da opera&ccedil;&atilde;o comercial.</h2>
                     </div>
                     <p class="summary-caption" id="sales-summary-range">
-                        Com base no filtro atual e na p&aacute;gina vis&iacute;vel de resultados.
+                        Escopo ativo | Todos os status | Janela completa | View 1/1 | Indicadores derivados do
+                        dataset vis&iacute;vel.
                     </p>
                 </div>
 
