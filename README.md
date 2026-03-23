@@ -327,7 +327,12 @@ docker compose run --rm app php artisan migrate:fresh --seed --force
 - Admin: `http://localhost:8000/`
 - API Docs: `http://localhost:8000/docs/`
 - API base: `http://localhost:8000/api/v1`
-- MySQL: `localhost:33060`
+- MySQL TCP endpoint: `127.0.0.1:33060`
+
+Observação:
+
+- a porta `33060` expõe o protocolo do MySQL, não uma interface HTTP
+- use esse endpoint em clientes como MySQL Workbench, DBeaver, TablePlus, HeidiSQL ou `mysql`
 
 ## 🧪 Testes
 
