@@ -8,7 +8,7 @@
 ![PHPUnit](https://img.shields.io/badge/PHPUnit-11-366488?logo=php&logoColor=white)
 ![Playwright](https://img.shields.io/badge/Playwright-E2E-2EAD33?logo=playwright&logoColor=white)
 ![OpenAPI](https://img.shields.io/badge/OpenAPI-3.1-6BA539?logo=openapiinitiative&logoColor=white)
-![Swagger UI](https://img.shields.io/badge/Swagger-UI-85EA2D?logo=swagger&logoColor=black)
+![API Docs](https://img.shields.io/badge/API%20Docs-self--hosted-85EA2D)
 ![Admin UI](https://img.shields.io/badge/Admin%20UI-Blade%20%2B%20Vanilla%20JS-11203B)
 ![Upload](https://img.shields.io/badge/Image%20Upload-enabled-C85F35)
 ![API](https://img.shields.io/badge/API-v1-0A7B83)
@@ -23,7 +23,7 @@ Além da API, o projeto inclui um **frontend administrativo leve** consumindo a 
 - API versionada em `/api/v1`
 - Upload opcional de imagem para produto
 - Form Requests, API Resources e Service Layer pragmática
-- OpenAPI 3.1 + Swagger UI estático
+- OpenAPI 3.1 + documentação self-hosted
 - Collection Postman
 - Admin UI em `Blade + JavaScript/CSS puros`
 - Testes de unidade, feature, contrato do dashboard e E2E
@@ -52,7 +52,7 @@ Além da API, o projeto inclui um **frontend administrativo leve** consumindo a 
 ### Documentação
 
 - OpenAPI 3.1
-- Swagger UI estático
+- referência de API self-hosted
 - Postman Collection
 
 ### Infra
@@ -325,7 +325,7 @@ docker compose run --rm app php artisan migrate:fresh --seed --force
 ### 2. URLs úteis
 
 - Admin: `http://localhost:8000/`
-- Swagger UI: `http://localhost:8000/docs/`
+- API Docs: `http://localhost:8000/docs/`
 - API base: `http://localhost:8000/api/v1`
 - MySQL: `localhost:33060`
 
@@ -370,8 +370,8 @@ Observação pragmática:
 
 Última validação registrada nesta entrega:
 
-- `38 tests`
-- `181 assertions`
+- suíte PHPUnit validada com sucesso via Docker
+- cobertura ativa para unit, feature, contrato estrutural do dashboard e E2E
 
 Cobertura principal:
 
@@ -417,7 +417,7 @@ Observação:
 ## 📚 Documentação
 
 - Admin: `http://localhost:8000/`
-- Swagger UI: `http://localhost:8000/docs/`
+- API Docs: `http://localhost:8000/docs/`
 - OpenAPI YAML: `public/docs/openapi.yaml`
 - Postman Collection: `docs/postman/Creditall Challenge.postman_collection.json`
 - Smoke checklist do dashboard: `docs/qa/dashboard-smoke-checklist.md`
@@ -562,7 +562,7 @@ Padrões deliberadamente não usados:
 - integridade relacional garantida com FK, constraints e regras de exclusão
 - paginação, filtros e ordenação implementados
 - upload de imagem validado e serializado
-- OpenAPI, Swagger UI e Postman entregues
+- OpenAPI, documentação self-hosted e Postman entregues
 - frontend administrativo funcional e integrado à API
 - Docker Compose funcional com PHP 8.3, MySQL 8 e serviço E2E
 

@@ -1,43 +1,627 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-BR">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Creditall Sales API Docs</title>
-    <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5/swagger-ui.css">
     <style>
-      html {
-        box-sizing: border-box;
-        overflow-y: scroll;
+      :root {
+        color-scheme: light;
+        --bg: #f4efe6;
+        --panel: #fffaf2;
+        --panel-strong: #122446;
+        --ink: #14264a;
+        --muted: #546886;
+        --accent: #bf5828;
+        --line: rgba(20, 38, 74, 0.11);
+        --shadow: 0 26px 70px rgba(19, 36, 70, 0.08);
+        --radius-xl: 28px;
+        --radius-lg: 20px;
+        --radius-md: 14px;
       }
 
-      *, *::before, *::after {
-        box-sizing: inherit;
+      * {
+        box-sizing: border-box;
       }
 
       body {
         margin: 0;
-        background: #f7f7f2;
+        min-height: 100vh;
+        font-family: "Segoe UI", Inter, system-ui, sans-serif;
+        background:
+          radial-gradient(circle at top left, rgba(191, 88, 40, 0.17), transparent 28%),
+          radial-gradient(circle at top right, rgba(10, 123, 131, 0.12), transparent 24%),
+          var(--bg);
+        color: var(--ink);
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .shell {
+        width: min(1240px, calc(100vw - 40px));
+        margin: 36px auto;
+      }
+
+      .hero,
+      .section {
+        background: rgba(255, 250, 242, 0.9);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        border-radius: var(--radius-xl);
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(20px);
+      }
+
+      .hero {
+        padding: 32px;
+        display: grid;
+        gap: 28px;
+      }
+
+      .eyebrow {
+        margin: 0 0 12px;
+        font-size: 0.82rem;
+        font-weight: 800;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      p {
+        margin: 0;
+      }
+
+      .hero h1 {
+        max-width: 680px;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(2.5rem, 5vw, 4.7rem);
+        line-height: 0.95;
+        letter-spacing: -0.05em;
+      }
+
+      .hero-copy {
+        display: grid;
+        gap: 14px;
+      }
+
+      .hero-copy p {
+        max-width: 760px;
+        font-size: 1.05rem;
+        line-height: 1.7;
+        color: var(--muted);
+      }
+
+      .hero-actions,
+      .hero-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+      }
+
+      .button,
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        text-decoration: none;
+        border-radius: 999px;
+        transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+      }
+
+      .button {
+        min-height: 52px;
+        padding: 0 20px;
+        font-size: 1rem;
+        font-weight: 700;
+        border: 1px solid transparent;
+      }
+
+      .button:hover,
+      .pill:hover {
+        transform: translateY(-1px);
+      }
+
+      .button-primary {
+        background: linear-gradient(135deg, #bf5828, #a9481f);
+        color: #fffaf2;
+        box-shadow: 0 16px 32px rgba(191, 88, 40, 0.2);
+      }
+
+      .button-secondary {
+        background: rgba(255, 255, 255, 0.72);
+        border-color: var(--line);
+        color: var(--ink);
+      }
+
+      .pill {
+        min-height: 40px;
+        padding: 0 16px;
+        font-size: 0.9rem;
+        font-weight: 700;
+        background: rgba(255, 255, 255, 0.68);
+        border: 1px solid var(--line);
+        color: var(--muted);
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .surface-card {
+        min-height: 186px;
+        padding: 22px;
+        border-radius: var(--radius-lg);
+        background:
+          radial-gradient(circle at top right, rgba(10, 123, 131, 0.08), transparent 44%),
+          rgba(255, 255, 255, 0.76);
+        border: 1px solid var(--line);
+        display: grid;
+        gap: 12px;
+      }
+
+      .surface-card h3 {
+        font-size: 0.98rem;
+        color: var(--muted);
+      }
+
+      .surface-card strong {
+        font-size: 1.9rem;
+        font-family: Georgia, "Times New Roman", serif;
+        letter-spacing: -0.04em;
+      }
+
+      .surface-card p,
+      .section-copy {
+        font-size: 1rem;
+        line-height: 1.65;
+        color: var(--muted);
+      }
+
+      .section {
+        margin-top: 26px;
+        padding: 28px;
+      }
+
+      .section-header {
+        display: grid;
+        gap: 10px;
+        margin-bottom: 22px;
+      }
+
+      .section-header h2 {
+        font-size: clamp(1.6rem, 3vw, 2.5rem);
+        font-family: Georgia, "Times New Roman", serif;
+        letter-spacing: -0.04em;
+      }
+
+      .endpoint-grid {
+        display: grid;
+        gap: 18px;
+      }
+
+      .endpoint-card {
+        border: 1px solid var(--line);
+        border-radius: var(--radius-lg);
+        background: rgba(255, 255, 255, 0.72);
+        padding: 22px;
+        display: grid;
+        gap: 16px;
+      }
+
+      .endpoint-head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .method {
+        min-width: 76px;
+        padding: 7px 12px;
+        border-radius: 999px;
+        text-align: center;
+        font-size: 0.8rem;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #fffaf2;
+      }
+
+      .method-get {
+        background: #0a7b83;
+      }
+
+      .method-post {
+        background: #247a45;
+      }
+
+      .method-put {
+        background: #6e58c0;
+      }
+
+      .method-delete {
+        background: #b34822;
+      }
+
+      .path {
+        font-family: Consolas, "SFMono-Regular", monospace;
+        font-size: 0.95rem;
+        color: var(--ink);
+        overflow-wrap: anywhere;
+      }
+
+      .meta-list,
+      .schema-grid,
+      .example-grid {
+        display: grid;
+        gap: 14px;
+      }
+
+      .meta-list {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      }
+
+      .meta-item {
+        padding: 14px 16px;
+        border-radius: var(--radius-md);
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.7);
+      }
+
+      .meta-item span {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 0.82rem;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+
+      pre {
+        margin: 0;
+        padding: 18px;
+        border-radius: var(--radius-md);
+        border: 1px solid rgba(18, 36, 70, 0.09);
+        background: #11203b;
+        color: #eff2f6;
+        overflow-x: auto;
+        font: 0.9rem/1.6 Consolas, "SFMono-Regular", monospace;
+      }
+
+      .footer {
+        margin-top: 22px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        justify-content: space-between;
+        align-items: center;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      @media (max-width: 980px) {
+        .hero-grid,
+        .meta-list,
+        .schema-grid,
+        .example-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .hero {
+          padding: 24px;
+        }
+
+        .section {
+          padding: 22px;
+        }
       }
     </style>
   </head>
   <body>
-    <div id="swagger-ui"></div>
-    <script src="https://unpkg.com/swagger-ui-dist@5/swagger-ui-bundle.js" crossorigin></script>
-    <script src="https://unpkg.com/swagger-ui-dist@5/swagger-ui-standalone-preset.js" crossorigin></script>
+    <main class="shell">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Creditall Sales API</p>
+          <h1>OpenAPI reference for products, customers and sales.</h1>
+          <p>
+            Referência self-hosted da API entregue no desafio. O contrato OpenAPI 3.1 segue disponível
+            como fonte oficial, com endpoints versionados, regras de negócio essenciais, exemplos e links
+            rápidos para operação local.
+          </p>
+        </div>
+
+        <div class="hero-actions">
+          <a class="button button-primary" href="/docs/openapi.yaml">OpenAPI YAML</a>
+          <a class="button button-secondary" href="/">Abrir admin</a>
+          <a class="button button-secondary" href="/api/v1/products">Sample API response</a>
+        </div>
+
+        <div class="hero-links">
+          <span class="pill">API versionada em /api/v1</span>
+          <span class="pill">Upload de imagem habilitado</span>
+          <span class="pill">Docker Compose first</span>
+        </div>
+
+        <div class="hero-grid" id="domain-cards"></div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <p class="eyebrow">Endpoints</p>
+          <h2>Contrato de integração por domínio.</h2>
+          <p class="section-copy">
+            Abaixo está um resumo operacional dos recursos principais. O arquivo <code>/docs/openapi.yaml</code>
+            permanece como fonte de verdade para integração automática e tooling externo.
+          </p>
+        </div>
+        <div class="endpoint-grid" id="endpoint-groups"></div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <p class="eyebrow">Examples</p>
+          <h2>Payloads de referência.</h2>
+        </div>
+        <div class="example-grid" id="examples"></div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <p class="eyebrow">Errors & Security</p>
+          <h2>Respostas padronizadas e guard-rails do domínio.</h2>
+        </div>
+        <div class="meta-list">
+          <article class="meta-item">
+            <span>Validation</span>
+            <p>Falhas de Form Request retornam <strong>422</strong> com <code>message</code> e <code>errors</code>.</p>
+          </article>
+          <article class="meta-item">
+            <span>Not Found</span>
+            <p>Recursos ou endpoints inválidos retornam <strong>404</strong> com payload de erro consistente.</p>
+          </article>
+          <article class="meta-item">
+            <span>Conflict</span>
+            <p>Conflitos de integridade ou regras de exclusão retornam <strong>409</strong>.</p>
+          </article>
+          <article class="meta-item">
+            <span>Security</span>
+            <p>CPF mascarado na serialização, upload validado e rate limit por IP.</p>
+          </article>
+        </div>
+        <div class="footer">
+          <span>OpenAPI source of truth: <a href="/docs/openapi.yaml">/docs/openapi.yaml</a></span>
+          <span>Admin UI: <a href="/">http://localhost:8000/</a></span>
+        </div>
+      </section>
+    </main>
+
     <script>
-      window.onload = function () {
-        window.ui = SwaggerUIBundle({
-          url: '/docs/openapi.yaml',
-          dom_id: '#swagger-ui',
-          deepLinking: true,
-          presets: [
-            SwaggerUIBundle.presets.apis,
-            SwaggerUIStandalonePreset
-          ],
-          layout: 'StandaloneLayout'
-        });
-      };
+      const domainCards = [
+        {
+          title: 'Products',
+          value: 'Catalog',
+          description: 'CRUD completo com busca, faixa de preço, ordenação, upload opcional e serialização via API Resource.'
+        },
+        {
+          title: 'Customers',
+          value: 'CRM',
+          description: 'Validação de e-mail único, CPF estruturalmente válido, normalização defensiva e mascaramento nas responses.'
+        },
+        {
+          title: 'Sales',
+          value: 'Transactions',
+          description: 'Snapshot financeiro com unit_price, gross_amount e final_amount para preservar histórico transacional.'
+        }
+      ];
+
+      const endpointGroups = [
+        {
+          title: 'Products',
+          description: 'Catálogo de produtos com upload de imagem, busca textual e filtros por preço.',
+          endpoints: [
+            {
+              method: 'GET',
+              path: '/api/v1/products',
+              summary: 'Listagem paginada de produtos.',
+              meta: {
+                filtros: 'search, min_price, max_price, sort, direction, per_page',
+                sucesso: '200 OK',
+                erros: '422 validation'
+              }
+            },
+            {
+              method: 'POST',
+              path: '/api/v1/products',
+              summary: 'Criação de produto via multipart/form-data.',
+              meta: {
+                payload: 'name, description, price, image?',
+                sucesso: '201 Created',
+                erros: '422 validation'
+              }
+            },
+            {
+              method: 'PUT',
+              path: '/api/v1/products/{product}',
+              summary: 'Atualização com troca ou remoção segura da imagem.',
+              meta: {
+                payload: 'name, description, price, image?, remove_image?',
+                sucesso: '200 OK',
+                erros: '404 not found, 422 validation'
+              }
+            },
+            {
+              method: 'DELETE',
+              path: '/api/v1/products/{product}',
+              summary: 'Exclusão bloqueada quando houver vendas vinculadas.',
+              meta: {
+                sucesso: '204 No Content',
+                erros: '404 not found, 409 conflict'
+              }
+            }
+          ]
+        },
+        {
+          title: 'Customers',
+          description: 'Cadastro de clientes com validação de CPF, unicidade e busca por nome, e-mail ou prefixo do documento.',
+          endpoints: [
+            {
+              method: 'GET',
+              path: '/api/v1/customers',
+              summary: 'Listagem paginada de clientes com ordenação.',
+              meta: {
+                filtros: 'search, sort, direction, per_page',
+                sucesso: '200 OK',
+                erros: '422 validation'
+              }
+            },
+            {
+              method: 'POST',
+              path: '/api/v1/customers',
+              summary: 'Criação de cliente com CPF sanitizado e e-mail único.',
+              meta: {
+                payload: 'name, email, cpf',
+                sucesso: '201 Created',
+                erros: '422 validation'
+              }
+            },
+            {
+              method: 'PUT',
+              path: '/api/v1/customers/{customer}',
+              summary: 'Atualização mantendo validação de unicidade com ignore no próprio recurso.',
+              meta: {
+                payload: 'name, email, cpf',
+                sucesso: '200 OK',
+                erros: '404 not found, 422 validation'
+              }
+            },
+            {
+              method: 'DELETE',
+              path: '/api/v1/customers/{customer}',
+              summary: 'Exclusão bloqueada quando houver vínculo com vendas.',
+              meta: {
+                sucesso: '204 No Content',
+                erros: '404 not found, 409 conflict'
+              }
+            }
+          ]
+        },
+        {
+          title: 'Sales',
+          description: 'Vendas com enum de status, filtro temporal inclusivo e snapshot financeiro preservado em update.',
+          endpoints: [
+            {
+              method: 'GET',
+              path: '/api/v1/sales',
+              summary: 'Listagem paginada com eager loading resumido de produto e cliente.',
+              meta: {
+                filtros: 'status, product_id, customer_id, sold_from, sold_to, sort, direction, per_page',
+                sucesso: '200 OK',
+                erros: '422 validation'
+              }
+            },
+            {
+              method: 'POST',
+              path: '/api/v1/sales',
+              summary: 'Criação de venda com cálculo de gross_amount, discount e final_amount.',
+              meta: {
+                payload: 'product_id, customer_id, sold_at, quantity, discount, status',
+                sucesso: '201 Created',
+                erros: '404 not found, 422 validation'
+              }
+            },
+            {
+              method: 'PUT',
+              path: '/api/v1/sales/{sale}',
+              summary: 'Update preserva unit_price histórico quando o produto não muda.',
+              meta: {
+                payload: 'product_id, customer_id, sold_at, quantity, discount, status',
+                sucesso: '200 OK',
+                erros: '404 not found, 422 validation'
+              }
+            },
+            {
+              method: 'DELETE',
+              path: '/api/v1/sales/{sale}',
+              summary: 'Exclusão física para aderir ao CRUD simples do desafio.',
+              meta: {
+                sucesso: '204 No Content',
+                erros: '404 not found'
+              }
+            }
+          ]
+        }
+      ];
+
+      const examples = [
+        {
+          title: 'Criar cliente',
+          body: `POST /api/v1/customers\nContent-Type: application/json\n\n{\n  "name": "Ana Martins",\n  "email": "ana.martins@example.com",\n  "cpf": "52998224725"\n}`
+        },
+        {
+          title: 'Criar produto',
+          body: `POST /api/v1/products\nContent-Type: multipart/form-data\n\nname=Mechanical Keyboard\ndescription=Hot-swappable 75% keyboard\nprice=499.90\nimage=<binary optional>`
+        },
+        {
+          title: 'Criar venda',
+          body: `POST /api/v1/sales\nContent-Type: application/json\n\n{\n  "product_id": 1,\n  "customer_id": 1,\n  "sold_at": "2026-03-20 10:30:00",\n  "quantity": 2,\n  "discount": "5.00",\n  "status": "pending"\n}`
+        }
+      ];
+
+      const domainCardsMarkup = domainCards.map((card) => `
+        <article class="surface-card">
+          <h3>${card.title}</h3>
+          <strong>${card.value}</strong>
+          <p>${card.description}</p>
+        </article>
+      `).join('');
+
+      const endpointGroupsMarkup = endpointGroups.map((group) => `
+        <article class="endpoint-card">
+          <div class="section-header">
+            <p class="eyebrow">${group.title}</p>
+            <h3>${group.description}</h3>
+          </div>
+          ${group.endpoints.map((endpoint) => `
+            <div class="meta-item">
+              <div class="endpoint-head">
+                <span class="method method-${endpoint.method.toLowerCase()}">${endpoint.method}</span>
+                <span class="path">${endpoint.path}</span>
+              </div>
+              <p style="margin-top: 12px;">${endpoint.summary}</p>
+              <div class="meta-list" style="margin-top: 14px;">
+                ${Object.entries(endpoint.meta).map(([label, value]) => `
+                  <div class="meta-item">
+                    <span>${label}</span>
+                    <p>${value}</p>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          `).join('')}
+        </article>
+      `).join('');
+
+      const examplesMarkup = examples.map((example) => `
+        <article class="endpoint-card">
+          <div class="section-header">
+            <p class="eyebrow">${example.title}</p>
+          </div>
+          <pre>${example.body}</pre>
+        </article>
+      `).join('');
+
+      document.getElementById('domain-cards').innerHTML = domainCardsMarkup;
+      document.getElementById('endpoint-groups').innerHTML = endpointGroupsMarkup;
+      document.getElementById('examples').innerHTML = examplesMarkup;
     </script>
   </body>
 </html>
