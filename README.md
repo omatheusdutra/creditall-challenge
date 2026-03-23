@@ -301,7 +301,7 @@ Stack do frontend atual:
 
 ## 🚀 Como rodar com Docker
 
-### 1. Preparar ambiente
+### 1. Primeira execução
 
 ```bash
 cp .env.example .env
@@ -312,17 +312,55 @@ docker compose run --rm app php artisan key:generate
 docker compose up -d app
 ```
 
-Observação:
+O que acontece nesse fluxo:
 
-- o serviço `app` executa `php artisan migrate --seed --force` no bootstrap
-- em volume novo, o banco sobe já populado com a massa inicial
-- para resetar manualmente o estado do banco, use:
+- `docker compose up -d app` sobe a aplicação
+- no bootstrap, o serviço `app` executa `php artisan migrate --seed --force`
+- se o volume do MySQL estiver novo, o banco sobe já populado com a massa inicial
+- se o volume do MySQL já existir, o comando apenas aplica migrations pendentes e roda o seeder novamente
+
+Observação prática:
+
+- na primeira subida, aguarde alguns segundos para o bootstrap terminar
+- se abrir o admin cedo demais, atualize a página após o container `app` estabilizar
+
+### 2. Resetar o banco e popular novamente
+
+Se você quiser recriar o banco dentro do volume atual e repopular tudo:
 
 ```bash
 docker compose run --rm app php artisan migrate:fresh --seed --force
 ```
 
-### 2. URLs úteis
+### 3. Fluxo 100% limpo do zero
+
+Se quiser simular uma primeira execução real, apagando também o volume do MySQL:
+
+```bash
+docker compose down -v
+cp .env.example .env
+docker compose build app
+docker compose up -d mysql
+docker compose run --rm app composer install --no-interaction --prefer-dist
+docker compose run --rm app php artisan key:generate
+docker compose up -d app
+```
+
+Resultado esperado:
+
+- container `mysql` saudável
+- container `app` em execução
+- banco `creditall` criado e populado automaticamente
+
+### 4. Confirmar que o banco foi populado
+
+Você pode validar rapidamente com:
+
+```bash
+docker compose exec mysql mysql -u creditall -pcreditall creditall -e "SELECT COUNT(*) AS customers FROM customers; SELECT COUNT(*) AS products FROM products; SELECT COUNT(*) AS sales FROM sales;"
+```
+
+### 5. URLs úteis
 
 - Admin: `http://localhost:8000/`
 - API Docs: `http://localhost:8000/docs/`
